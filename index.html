@@ -221,6 +221,7 @@
 .play-ring::before { content: ''; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 16px solid rgba(196,113,74,0.45); margin-left: 4px; }
 .video-placeholder p { font-family: 'Courier New', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(196,113,74,0.3); text-align: center; max-width: 200px; line-height: 1.6; }
 
+.video-coming-soon { font-family: var(--serif); font-style: italic; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--terracotta-light); letter-spacing: 0.01em; }
 .video-meta { display: flex; align-items: baseline; gap: 0.75rem; width: 100%; }
 .video-meta-eyebrow { font-family: 'Courier New', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(196,113,74,0.38); flex-shrink: 0; }
 .video-meta-title { font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: rgba(245,239,230,0.4); }
@@ -1342,6 +1343,7 @@ const projects = [
     gradient: "linear-gradient(155deg,#0a1a10 0%,#1a2e18 60%,#0a0e1a 100%)",
     videoSrc: "",
     videoLabel: "Gone Wrong — Full Cut",
+    hideBts: true,
     btsCaption: "Three days in the forest with a portable rig and a pair of binaural mics. Best experienced on headphones.",
     btsPhotos: [
       { src: "", label: "Recording in the forest" },
@@ -1354,6 +1356,10 @@ const projects = [
 
 /* ══════════════════════════════════════ STATE ══════════════════════════════════════ */
 const FRAMES = 3;
+/* each project has a title card, film and (unless hideBts) behind-the-lens frame */
+const frameMap = [];
+projects.forEach((p, pi) => { for (let fi = 0; fi < (p.hideBts ? 2 : 3); fi++) frameMap.push({ pi, fi }); });
+function firstIdx(pi) { return frameMap.findIndex(f => f.pi === pi); }
 let curProject = 0, curFrame = 0;
 let scrollLocked = false, animating = false, inited = false;
 let activePage = 'home';
@@ -1397,7 +1403,7 @@ function buildSprockets() {
 function buildFrames() {
   const track = document.getElementById('frames-track');
   track.innerHTML = '';
-  document.getElementById('frame-total').textContent = String(projects.length * FRAMES).padStart(2,'0');
+  document.getElementById('frame-total').textContent = String(frameMap.length).padStart(2,'0');
 
   projects.forEach((p, pi) => {
 
@@ -1443,7 +1449,7 @@ function buildFrames() {
 
     const embedHtml = hasVid
       ? `<iframe src="${p.videoSrc}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>`
-      : `<div class="video-placeholder"><div class="play-ring"></div><p>Paste your Vimeo or YouTube URL into videoSrc above</p></div>`;
+      : `<div class="video-placeholder"><div class="video-coming-soon">Coming soon</div></div>`;
 
     vf.innerHTML = `
       <div class="frame-bg" style="background:#080604"></div>
@@ -1452,7 +1458,7 @@ function buildFrames() {
         <div class="video-player" style="position:relative;">
           ${embedHtml}
         </div>
-        <div class="video-meta">
+        <div class="video-meta" ${hasVid ? '' : 'style="visibility:hidden"'}>
           <span class="video-meta-eyebrow">Now playing</span>
           <span class="video-meta-title">${p.videoLabel}</span>
         </div>
@@ -1492,7 +1498,7 @@ function buildFrames() {
         ${!use6 ? `<p class="bts-caption">${p.btsCaption}</p>` : ''}
       </div>
       <div class="frame-stamp">${p.id}003 ◆ ${p.year}</div>`;
-    track.appendChild(bf);
+    if (!p.hideBts) track.appendChild(bf);
   });
 }
 
@@ -1506,9 +1512,9 @@ function buildProjNav() {
     node.innerHTML = `<div class="proj-dot"></div><div class="proj-frames">
       <div class="proj-frame-pip ${pi===curProject&&curFrame===0?'on':''}"></div>
       <div class="proj-frame-pip ${pi===curProject&&curFrame===1?'on':''}"></div>
-      <div class="proj-frame-pip ${pi===curProject&&curFrame===2?'on':''}"></div>
+      ${p.hideBts ? '' : `<div class="proj-frame-pip ${pi===curProject&&curFrame===2?'on':''}"></div>`}
     </div>`;
-    node.addEventListener('click', () => jumpTo(pi * FRAMES));
+    node.addEventListener('click', () => jumpTo(firstIdx(pi)));
     el.appendChild(node);
   });
 }
@@ -1525,13 +1531,13 @@ function refreshNav() {
 }
 
 /* ══════════════════════════════════════ NAVIGATION ══════════════════════════════════════ */
-function globalIdx() { return curProject * FRAMES + curFrame; }
+function globalIdx() { return frameMap.findIndex(f => f.pi === curProject && f.fi === curFrame); }
 
 function jumpTo(idx, smooth = true) {
-  const total = projects.length * FRAMES;
+  const total = frameMap.length;
   if (idx < 0 || idx >= total) return;
-  curProject = Math.floor(idx / FRAMES);
-  curFrame   = idx % FRAMES;
+  curProject = frameMap[idx].pi;
+  curFrame   = frameMap[idx].fi;
   const track = document.getElementById('frames-track');
   track.style.transition = smooth ? 'transform 0.85s cubic-bezier(0.77,0,0.175,1)' : 'none';
   track.style.transform  = `translateY(-${idx * 100}vh)`;
@@ -1544,7 +1550,7 @@ function nextProject() {
   animating = true;
   const strip = document.getElementById('film-strip');
   strip.classList.add('switching');
-  const next = ((curProject + 1) % projects.length) * FRAMES;
+  const next = firstIdx((curProject + 1) % projects.length);
   setTimeout(() => { jumpTo(next, false); }, 400);
   setTimeout(() => { strip.classList.remove('switching'); animating = false; }, 800);
 }
