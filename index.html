@@ -34,24 +34,24 @@
   padding: 0 2.5rem; height: 80px; transition: background 0.4s, border-color 0.4s;
 }
 .site-nav.home-nav { background: rgba(245,239,230,0.93); backdrop-filter: blur(8px); border-bottom: 1px solid var(--cream-dark); }
-.site-nav.work-nav, .site-nav.sound-nav, .site-nav.about-nav { background: rgba(26,18,8,0.82); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(61,43,31,0.5); }
+.site-nav.work-nav, .site-nav.sound-nav, .site-nav.about-nav, .site-nav.contact-nav { background: rgba(26,18,8,0.82); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(61,43,31,0.5); }
 
 .nav-logo { display: flex; align-items: center; gap: 0.65rem; cursor: pointer; text-decoration: none; flex-shrink: 0; transition: opacity 0.2s; }
 .nav-logo:hover { opacity: 0.7; }
 .logo-mark { width: 95px; height: 95px; flex-shrink: 0; object-fit: contain; background: transparent; }
-.work-nav .logo-mark, .sound-nav .logo-mark, .about-nav .logo-mark { filter: brightness(0) invert(1) sepia(1) saturate(1.5) hue-rotate(330deg) brightness(0.95); }
+.work-nav .logo-mark, .sound-nav .logo-mark, .about-nav .logo-mark, .contact-nav .logo-mark { filter: brightness(0) invert(1) sepia(1) saturate(1.5) hue-rotate(330deg) brightness(0.95); }
 .logo-text { font-family: var(--serif); font-size: 1.15rem; letter-spacing: 0.02em; transition: color 0.3s; }
 .home-nav .logo-text { color: var(--terracotta-dark); }
-.work-nav .logo-text, .sound-nav .logo-text, .about-nav .logo-text { color: var(--terracotta-light); }
+.work-nav .logo-text, .sound-nav .logo-text, .about-nav .logo-text, .contact-nav .logo-text { color: var(--terracotta-light); }
 
 .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
 .nav-links a { font-family: var(--sans); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; text-decoration: none; padding: 0.4rem 0.85rem; border-radius: 2rem; transition: all 0.2s; }
 .home-nav .nav-links a { color: var(--warm-brown-light); }
 .home-nav .nav-links a:hover { color: var(--terracotta); background: rgba(196,113,74,0.08); }
 .home-nav .nav-links a.active { color: var(--terracotta-dark); background: rgba(196,113,74,0.12); }
-.work-nav .nav-links a, .sound-nav .nav-links a, .about-nav .nav-links a { color: rgba(232,196,176,0.5); }
-.work-nav .nav-links a:hover, .sound-nav .nav-links a:hover, .about-nav .nav-links a:hover { color: var(--terracotta-light); background: rgba(196,113,74,0.12); }
-.work-nav .nav-links a.active, .sound-nav .nav-links a.active, .about-nav .nav-links a.active { color: var(--terracotta-light); background: rgba(196,113,74,0.15); }
+.work-nav .nav-links a, .sound-nav .nav-links a, .about-nav .nav-links a, .contact-nav .nav-links a { color: rgba(232,196,176,0.5); }
+.work-nav .nav-links a:hover, .sound-nav .nav-links a:hover, .about-nav .nav-links a:hover, .contact-nav .nav-links a:hover { color: var(--terracotta-light); background: rgba(196,113,74,0.12); }
+.work-nav .nav-links a.active, .sound-nav .nav-links a.active, .about-nav .nav-links a.active, .contact-nav .nav-links a.active { color: var(--terracotta-light); background: rgba(196,113,74,0.15); }
 
 /* ═══════════════ PAGES ═══════════════ */
 .page { display: none; }
@@ -364,6 +364,55 @@
 .film-strip.switching { animation: rollOut 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
 
 @media(max-width:700px){ .film-strip{width:100vw;} .side-panel{display:none;} }
+
+/* ═══════════════ CONTACT ═══════════════ */
+#page-about:not(.active) { display: none; } /* keep About hidden until it's opened */
+#page-contact { min-height: 100vh; background: radial-gradient(ellipse at 50% 35%, var(--film-mid) 0%, var(--film-dark) 70%); color: var(--cream); font-family: var(--sans); }
+.ct-wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 7.5rem 1.5rem 2rem; text-align: center; }
+.ct-eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta); display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.ct-eyebrow::before, .ct-eyebrow::after { content: ''; width: 1.5rem; height: 1px; background: var(--terracotta); }
+.ct-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.15; color: var(--cream); margin-bottom: 2.75rem; }
+.ct-title em { color: var(--terracotta-light); }
+
+.ct-slate { width: min(560px, 100%); text-align: left; filter: drop-shadow(0 24px 50px rgba(0,0,0,0.5)); }
+.ct-sticks { position: relative; height: 64px; }
+.ct-stick { position: absolute; left: 0; right: 0; height: 30px; border-radius: 3px;
+  background: repeating-linear-gradient(-55deg, var(--cream) 0 26px, #241a10 26px 52px); border: 2px solid #241a10; }
+.ct-stick.bottom { bottom: 0; }
+.ct-stick.top { bottom: 32px; transform-origin: 6px 100%; transform: rotate(0deg); }
+.ct-hinge { position: absolute; left: 0; bottom: 22px; width: 14px; height: 14px; border-radius: 50%; background: var(--terracotta); border: 2px solid #241a10; z-index: 2; }
+.ct-slate.clap .ct-stick.top { animation: ct-clap 0.9s cubic-bezier(.5,0,.3,1) both; }
+@keyframes ct-clap { 0% { transform: rotate(-20deg); } 70% { transform: rotate(-20deg); } 92% { transform: rotate(0deg); } 96% { transform: rotate(-2deg); } 100% { transform: rotate(0deg); } }
+.ct-sticks:hover .ct-stick.top { transform: rotate(-12deg); transition: transform 0.25s; }
+
+.ct-board { background: #1e1710; border: 2px solid #3a2a1c; border-radius: 4px; padding: 0.4rem 0; }
+.ct-row { display: grid; grid-template-columns: 7.5rem 1fr; align-items: baseline; gap: 1rem; padding: 0.95rem 1.5rem; border-bottom: 1px solid rgba(232,196,176,0.14); }
+.ct-k { font-family: 'Courier New', monospace; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta); }
+.ct-v { font-family: var(--serif); font-size: 1.15rem; color: var(--cream); overflow-wrap: anywhere; }
+.ct-v a { color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(232,196,176,0.35); transition: color 0.2s, border-color 0.2s; }
+.ct-v a:hover { color: var(--terracotta-light); border-color: var(--terracotta-light); }
+.ct-cells { display: grid; grid-template-columns: repeat(3, 1fr); }
+.ct-cell { padding: 0.9rem 1.5rem 0.7rem; border-right: 1px solid rgba(232,196,176,0.14); }
+.ct-cell:last-child { border-right: 0; }
+.ct-cell .ct-v { display: block; margin-top: 0.3rem; font-style: italic; color: var(--terracotta-light); }
+
+.ct-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2.5rem; }
+.ct-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; padding: 0.8rem 1.8rem; border-radius: 2rem; text-decoration: none; transition: all 0.2s; }
+.ct-btn.primary { background: var(--terracotta); color: var(--cream); }
+.ct-btn.primary:hover { background: var(--terracotta-dark); transform: translateY(-2px); }
+.ct-btn.ghost { border: 1px solid rgba(232,196,176,0.35); color: var(--terracotta-light); }
+.ct-btn.ghost:hover { background: rgba(196,113,74,0.12); border-color: var(--terracotta-light); }
+.ct-footer { margin-top: auto; padding-top: 3.5rem; font-size: 0.75rem; letter-spacing: 0.05em; color: rgba(232,196,176,0.55); }
+
+@media (max-width: 560px) {
+  .ct-row { grid-template-columns: 1fr; gap: 0.3rem; padding: 0.85rem 1.1rem; }
+  .ct-cell { padding: 0.8rem 1.1rem 0.6rem; }
+  .ct-sticks { height: 54px; }
+  .ct-stick { height: 24px; }
+  .ct-stick.top { bottom: 26px; }
+  .ct-hinge { bottom: 17px; }
+}
+@media (prefers-reduced-motion: reduce) { .ct-slate.clap .ct-stick.top { animation: none; } }
 </style>
 </head>
 <body>
@@ -379,7 +428,7 @@
     <li><a href="#" id="link-work"                   onclick="showPage('work');return false;">Editing</a></li>
     <li><a href="#" id="link-sound"                  onclick="showPage('sound');return false;">Sound Design</a></li>
     <li><a href="#" id="link-about"                  onclick="showPage('about');return false;">About</a></li>
-    <li><a href="#" id="link-contact"                onclick="showPage('home');scrollTo('contact');return false;">Contact</a></li>
+    <li><a href="#" id="link-contact"                onclick="showPage('contact');return false;">Contact</a></li>
   </ul>
 </nav>
 
@@ -404,19 +453,42 @@
     </div>
   </section>
 
-  <section class="home-section contact-section" id="contact">
-    <div class="section-eyebrow">Get in touch</div>
-    <h2 class="section-title">Let's make something<br><em style="font-family:var(--serif);font-style:italic;color:var(--terracotta-light);">worth watching.</em></h2>
 
-    <div class="contact-links">
-      <a class="contact-link" href="mailto:annieafflick17@gmail.com">✉ annieafflick17@gmail.com</a>
-      <a class="contact-link" href="https://www.linkedin.com/in/annie-afflick" target="_blank">LinkedIn</a>
-      <a class="contact-link" href="#">Vimeo</a>
-      <a class="contact-link" href="#">IMDb</a>
+</div>
+
+
+<!-- ══ CONTACT PAGE ══ -->
+<div class="page" id="page-contact">
+  <div class="ct-wrap">
+    <div class="ct-eyebrow">Get in touch</div>
+    <h2 class="ct-title">Let's make something<br><em>worth watching.</em></h2>
+
+    <div class="ct-slate" id="ct-slate">
+      <div class="ct-sticks" aria-hidden="true">
+        <div class="ct-stick top"></div>
+        <div class="ct-hinge"></div>
+        <div class="ct-stick bottom"></div>
+      </div>
+      <div class="ct-board">
+        <div class="ct-row"><span class="ct-k">Prod.</span><span class="ct-v">Annie Afflick</span></div>
+        <div class="ct-row"><span class="ct-k">Role</span><span class="ct-v">Film Editor &amp; Sound Designer</span></div>
+        <div class="ct-row"><span class="ct-k">Email</span><span class="ct-v"><a href="mailto:annieafflick17@gmail.com">annieafflick17@gmail.com</a></span></div>
+        <div class="ct-row"><span class="ct-k">LinkedIn</span><span class="ct-v"><a href="https://www.linkedin.com/in/annie-afflick" target="_blank" rel="noopener">in/annie-afflick</a></span></div>
+        <div class="ct-cells">
+          <div class="ct-cell"><span class="ct-k">Scene</span><span class="ct-v">Contact</span></div>
+          <div class="ct-cell"><span class="ct-k">Take</span><span class="ct-v">01</span></div>
+          <div class="ct-cell"><span class="ct-k">Year</span><span class="ct-v">2026</span></div>
+        </div>
+      </div>
     </div>
-    <div class="home-footer">© 2026 Annie Afflick. Hosted free on GitHub Pages.</div>
-  </section>
 
+    <div class="ct-actions">
+      <a class="ct-btn primary" href="mailto:annieafflick17@gmail.com">✉ Email me</a>
+      <a class="ct-btn ghost" href="https://www.linkedin.com/in/annie-afflick" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+
+    <div class="ct-footer">© 2026 Annie Afflick</div>
+  </div>
 </div>
 
 
@@ -1338,10 +1410,10 @@ function showPage(p) {
   const target = document.getElementById('page-' + p);
   target.classList.add('active');
   target.style.display = '';
-  const dark = ['work','sound','about'];
+  const dark = ['work','sound','about','contact'];
   document.getElementById('site-nav').className = 'site-nav ' + (dark.includes(p) ? p+'-nav' : 'home-nav');
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  const lk = document.getElementById('link-' + (['work','sound','about'].includes(p) ? p : 'home'));
+  const lk = document.getElementById('link-' + (['work','sound','about','contact'].includes(p) ? p : 'home'));
   if (lk) lk.classList.add('active');
   activePage = p;
   if (p === 'work')  { document.body.style.overflow = 'hidden'; if (!inited)       initWork(); }
@@ -1352,6 +1424,10 @@ function showPage(p) {
     else { const c = document.getElementById('ab-canvas'); if(c){c.width=window.innerWidth;c.height=window.innerHeight;} }
   }
   else document.body.style.overflow = '';
+  if (p === 'contact') {
+    const sl = document.getElementById('ct-slate');
+    if (sl) { sl.classList.remove('clap'); void sl.offsetWidth; sl.classList.add('clap'); }
+  }
 }
 
 function scrollTo(id) { setTimeout(() => { const el = document.getElementById(id); if (el) el.scrollIntoView({behavior:'smooth'}); }, 80); }
