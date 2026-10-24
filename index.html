@@ -1664,7 +1664,7 @@ window.addEventListener('keydown', e => {
 /* ══════════════════════════════════════ INIT ══════════════════════════════════════ */
 
 /* ══════════════════════════════════════ CATEGORIES ══════════════════════════════════════ */
-function countLabel(n) { return n === 0 ? 'Coming soon' : n + (n === 1 ? ' project' : ' projects'); }
+function countLabel(n) { return n === 0 ? 'Coming soon' : ''; }
 
 function reelSVG(full) {
   const holes = [0, 72, 144, 216, 288].map(a => {
@@ -1686,7 +1686,7 @@ function buildCatUI() {
     CATEGORIES.map((c, i) => `<button class="cat-tab" data-cat="${c.key}">
       <span class="cat-num">${String(i + 1).padStart(2, '0')}</span>
       <span class="cat-name">${c.label}</span>
-      <span class="cat-count">${countLabel(catProjects(c.key).length)}</span>
+      ${catProjects(c.key).length ? '' : `<span class="cat-count">${countLabel(0)}</span>`}
     </button>`).join('');
   document.getElementById('cat-bar').innerHTML = CATEGORIES.map(c =>
     `<button class="cat-pill" data-cat="${c.key}">${c.label}</button>`).join('');
@@ -1698,7 +1698,7 @@ function buildCatUI() {
     const n = catProjects(c.key).length;
     return `<button class="cl-reel ${n ? '' : 'empty'}" data-cat="${c.key}" style="animation-delay:${0.15 + i * 0.12}s">
       ${reelSVG(n > 0)}
-      <span class="cl-text"><span class="cl-name">${c.label}</span><span class="cl-count">${countLabel(n)}</span></span>
+      <span class="cl-text"><span class="cl-name">${c.label}</span>${n ? '' : `<span class="cl-count">${countLabel(n)}</span>`}</span>
     </button>`;
   }).join('');
   reels.querySelectorAll('.cl-reel').forEach(b => b.addEventListener('click', () => {
