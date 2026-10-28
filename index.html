@@ -1418,6 +1418,7 @@ const allProjects = [
     gradient: "linear-gradient(155deg,#1c1020 0%,#2e1f0f 60%,#120a16 100%)",
     videoSrc: "",
     videoLabel: "Erase Her",
+    trailerSrc: "https://player.vimeo.com/video/1217864768?h=7eb7277f96&badge=0&autopause=0&player_id=0&app_id=58479",
     hideBts: true,
     btsCaption: "",
     btsPhotos: []
@@ -1443,7 +1444,15 @@ function emptyCat(c) {
 const FRAMES = 3;
 /* each project has a title card, film and (unless hideBts) behind-the-lens frame */
 let frameMap = [];
-function frameCount(p) { return p.onlyTitle ? 1 : (p.hideBts ? 2 : 3); }
+function frameKinds(p) {
+  if (p.onlyTitle) return ['title'];
+  const k = ['title'];
+  if (p.trailerSrc) k.push('trailer');
+  k.push('film');
+  if (!p.hideBts) k.push('bts');
+  return k;
+}
+function frameCount(p) { return frameKinds(p).length; }
 function rebuildMap() {
   frameMap = [];
   projects.forEach((p, pi) => { for (let fi = 0; fi < frameCount(p); fi++) frameMap.push({ pi, fi }); });
@@ -1508,7 +1517,7 @@ function buildFrames() {
         <div class="title-tags">${p.tags.map(t=>`<span class="title-tag">${t}</span>`).join('')}</div>
         <p class="title-desc">${p.desc}</p>
       </div>
-      <div class="scroll-cue" ${p.onlyTitle ? 'style="display:none"' : ''}><span>Watch the film</span><div class="cue-arrow"></div></div>
+      <div class="scroll-cue" ${p.onlyTitle ? 'style="display:none"' : ''}><span>${p.trailerSrc && !p.videoSrc ? 'Watch the trailer' : 'Watch the film'}</span><div class="cue-arrow"></div></div>
       <div class="frame-stamp">${p.id}001${p.year ? ' ◆ ' + p.year : ''}</div>`;
     track.appendChild(tf);
 
@@ -1553,6 +1562,24 @@ function buildFrames() {
         </div>
       </div>
       <div class="frame-stamp">${p.id}002${p.year ? ' ◆ ' + p.year : ''}</div>`;
+    /* — TRAILER (optional, sits before the film frame) — */
+    if (p.trailerSrc && !p.onlyTitle) {
+      const trf = document.createElement('div'); trf.className = 'film-frame';
+      trf.innerHTML = `
+        <div class="frame-bg" style="background:#080604"></div>
+        <div class="grain"></div>
+        <div class="video-content">
+          <div class="video-player" style="position:relative;">
+            ${buildEmbed(p.trailerSrc, 'trailer-' + pi)}
+          </div>
+          <div class="video-meta">
+            <span class="video-meta-eyebrow">Trailer</span>
+            <span class="video-meta-title">${p.videoLabel}</span>
+          </div>
+        </div>
+        <div class="frame-stamp">${p.id}TR${p.year ? ' ◆ ' + p.year : ''}</div>`;
+      track.appendChild(trf);
+    }
     if (!p.onlyTitle) track.appendChild(vf);
 
     /* — BTS — 6-photo grid for project A, 2-photo for others */
@@ -1612,8 +1639,8 @@ function refreshNav() {
     node.classList.toggle('active', pi === curProject);
     node.querySelectorAll('.proj-frame-pip').forEach((pip, fi) => pip.classList.toggle('on', pi === curProject && fi === curFrame));
   });
-  const labels = ['Title card','Film','Behind the lens'];
-  const tl = document.getElementById('frame-type-label'); if (tl) tl.textContent = labels[curFrame] || '';
+  const labels = { title: 'Title card', trailer: 'Trailer', film: 'Film', bts: 'Behind the lens' };
+  const tl = document.getElementById('frame-type-label'); if (tl) tl.textContent = labels[frameKinds(projects[curProject])[curFrame]] || '';
   const rl = document.getElementById('roll-label'); if (rl) rl.textContent = `Roll ${projects[curProject].id}`;
 }
 
