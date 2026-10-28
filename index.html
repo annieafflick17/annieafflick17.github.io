@@ -1408,6 +1408,19 @@ const allProjects = [
       { src: "", label: "Mix stage" },
       { src: "", label: "New Forest, dawn" }
     ]
+  },
+  {
+    category: "narrative",
+    id: "D", year: "", dateRange: "",
+    title: "Erase <em>Her</em>",
+    tags: ["Narrative","Short Film","Surrealist"],
+    desc: "",
+    gradient: "linear-gradient(155deg,#1c1020 0%,#2e1f0f 60%,#120a16 100%)",
+    videoSrc: "",
+    videoLabel: "Erase Her",
+    hideBts: true,
+    btsCaption: "",
+    btsPhotos: []
   }
 ];
 
@@ -1489,14 +1502,14 @@ function buildFrames() {
       <div class="frame-bg" style="background:${p.gradient}"></div>
       <div class="grain"></div>
       <div class="title-content">
-        <div class="title-roll-id">${p.dateRange || ('Roll ' + p.id + ' ◆ ' + p.year)}</div>
+        <div class="title-roll-id">${p.dateRange || ('Roll ' + p.id + (p.year ? ' ◆ ' + p.year : ''))}</div>
         <h2 class="title-name">${p.title}</h2>
         <div class="title-rule"></div>
         <div class="title-tags">${p.tags.map(t=>`<span class="title-tag">${t}</span>`).join('')}</div>
         <p class="title-desc">${p.desc}</p>
       </div>
       <div class="scroll-cue" ${p.onlyTitle ? 'style="display:none"' : ''}><span>Watch the film</span><div class="cue-arrow"></div></div>
-      <div class="frame-stamp">${p.id}001 ◆ ${p.year}</div>`;
+      <div class="frame-stamp">${p.id}001${p.year ? ' ◆ ' + p.year : ''}</div>`;
     track.appendChild(tf);
 
     /* — VIDEO — */
@@ -1539,7 +1552,7 @@ function buildFrames() {
           <span class="video-meta-title">${p.videoLabel}</span>
         </div>
       </div>
-      <div class="frame-stamp">${p.id}002 ◆ ${p.year}</div>`;
+      <div class="frame-stamp">${p.id}002${p.year ? ' ◆ ' + p.year : ''}</div>`;
     if (!p.onlyTitle) track.appendChild(vf);
 
     /* — BTS — 6-photo grid for project A, 2-photo for others */
@@ -1573,7 +1586,7 @@ function buildFrames() {
         <div class="${gridClass}">${photosHTML}</div>
         ${!use6 ? `<p class="bts-caption">${p.btsCaption}</p>` : ''}
       </div>
-      <div class="frame-stamp">${p.id}003 ◆ ${p.year}</div>`;
+      <div class="frame-stamp">${p.id}003${p.year ? ' ◆ ' + p.year : ''}</div>`;
     if (!p.hideBts && !p.onlyTitle) track.appendChild(bf);
   });
 }
